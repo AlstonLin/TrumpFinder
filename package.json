@@ -20,6 +20,9 @@
     "express" : "*",
     "path" : "*",
     "body-parser" : "*",
-    "request" : "*"
+    "request" : "*",
+    "jQuery" : "*",
+    "cheerio": "*",
+    "normalize-url" : "*"
   }
 }
