@@ -23,6 +23,7 @@
     "request" : "*",
     "jQuery" : "*",
     "cheerio": "*",
-    "normalize-url" : "*"
+    "normalize-url" : "*",
+    "socket.io" : "*"
   }
 }

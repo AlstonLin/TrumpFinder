@@ -1,5 +1,37 @@
-<form action="/find" method="post">
-<h3>Url</h3>
-<input type="text" name="url" placeholder="Url Here" /><br/>
-<button type="submit">Find Trump</button>
-</form>
+<!doctype html>
+<html>
+  <body>
+    <div id="content">
+      <form action="">
+        <h3>Url</h3>
+        <input id="url" type="text" name="url" placeholder="Url Here" /><br/>
+        <button type="submit">Find Trump</button>
+      </form>
+    </div>
+    <div id="tree">
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    $('form').submit(function(){
+      socket.emit('find', $('#url').val());
+      return false
+    });
+    socket.on('result', function(result){
+      $("#content").html(result);
+    });
+    socket.on("visit", function(visit){
+      for (var i in visit.newLinks){
+        var row = $("#visits" + visit.newLinks[i].generation);
+        if (row.length == 0){
+          var randColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+          $("#tree").append('<div id="visits' + visit.newLinks[i].generation + '" style="background-color: ' + randColor + ';"></div>');
+          row = $("#visits" + visit.newLinks[i].generation);
+        }
+        row.append(" " + visit.newLinks[i].url + "<br/>");
+        window.scrollTo(0,document.body.scrollHeight);
+      }
+    });
+  </script>
+</html>

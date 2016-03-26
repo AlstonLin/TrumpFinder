@@ -1,37 +1,45 @@
 var request = require('request')
 var express = require('express');
 var app = express();
+var http = require('http').Server(app);
 var cheerio = require('cheerio');
-var jsdom = require('jsdom').jsdom;
 var bodyParser = require('body-parser');
 var path = require('path');
+var io = require('socket.io')(http);
 app.use(bodyParser());
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+});
+
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + "/index.html"));
 });
 
-app.post('/find', function(req, res) {
-  var url = req.body.url;
-  findTrump([url], function (result){
-    if (result == null){
-      res.end("Trump not found");
-    } else {
-      res.end(result);
-    }
-  }, {});
+io.on('connection', function(socket){
+  socket.on('find', function(url) {
+    console.log("Find request with url=" + url);
+    findTrump(socket, [{ generation: 0, url: url}], function (result){
+      if (result == null){
+        socket.emit("result", "Trump not found");
+      } else {
+        socket.emit("result" , result);
+      }
+    }, {});
+  });
 });
 
-app.listen(3000, function () {
+http.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
 
-function findTrump(queue, callback, visited){
+function findTrump(socket, queue, callback, visited){
   if (queue.length != 0){
-    var url = queue.shift();
-    console.log("Visiting " + url);
+    var item = queue.shift();
+    console.log("Visiting " + item.url);
     request({
-        url: url,
+        url: item.url,
         timeout: 3000
       }, function(err, response, body) {
       if (!err){
@@ -40,12 +48,16 @@ function findTrump(queue, callback, visited){
           callback(body);
         } else{
           console.log("Still looking");
-          queue = queue.concat(getLinks(body, extractRoot(url), visited));
-          findTrump(queue, callback, visited);
+          var links = getLinks(body, extractRoot(item.url), visited, item.generation);
+          queue = queue.concat(links);
+          socket.emit("visit", {
+            newLinks : links
+          });
+          findTrump(socket, queue, callback, visited);
         }
       } else {
         console.log("Error");
-        findTrump(queue, callback, visited);
+        findTrump(socket, queue, callback, visited);
       }
     });
   } else {
@@ -53,7 +65,7 @@ function findTrump(queue, callback, visited){
   }
 }
 
-function getLinks(body, root, visited){
+function getLinks(body, root, visited, oldGeneration){
   var $ = cheerio.load(body);
   links = [];
   $("a").each(function(){
@@ -64,7 +76,10 @@ function getLinks(body, root, visited){
       }
       link = normalize(link);
       if (!(link in visited)){
-        links.push(link);
+        links.push({
+          generation: oldGeneration + 1, 
+          url: link
+        });
         visited[link] = true;
       }
     }
