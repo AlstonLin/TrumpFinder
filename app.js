@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var io = require('socket.io')(http);
 app.use(bodyParser());
+app.use('/public', express.static(__dirname + '/public'));
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -77,7 +78,7 @@ function getLinks(body, root, visited, oldGeneration){
       link = normalize(link);
       if (!(link in visited)){
         links.push({
-          generation: oldGeneration + 1, 
+          generation: oldGeneration + 1,
           url: link
         });
         visited[link] = true;
