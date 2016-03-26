@@ -1,3 +1,4 @@
+// goo.gl/ypdvjL
 var socket = io();
 $('form').submit(function(){
   socket.emit('find', $('#url').val());
@@ -48,7 +49,7 @@ function changeImages(){
 }
 
 function isTrump(url, callback){
-  var key = "58ef7fd3870e810561d0a9786d6f5a6d34750362";
+  var key = "c2335ff0aa92f9b07126dd0219e48581be27cea9";
   $.ajax({
     type: "GET",
     url: "http://gateway-a.watsonplatform.net/calls/url/URLGetRankedImageFaceTags",
