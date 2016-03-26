@@ -16,6 +16,10 @@
     "url": "https://github.com/AlstonLin/TrumpFinder/issues"
   },
   "dependencies" : {
-    "express" : "*"
+    "xmlhttprequest"  : "*",
+    "express" : "*",
+    "path" : "*",
+    "body-parser" : "*",
+    "request" : "*"
   }
 }
