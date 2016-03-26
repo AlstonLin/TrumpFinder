@@ -1,4 +1,25 @@
 h1.trump {
   background-color: yellow;
-  font-size: 169px !important;
+  font-size: 150px !important;
+}
+
+p.title {
+  font-size: 128pt;
+  color: white;
+  font-family: 'Poiret One', sans
+}
+
+input.urlField {
+  height: 64px;
+  font-size: 24px;
+}
+
+button.trumpButton {
+  height: 64px;
+  font-size: 32px;
+  background-color: orange;
+}
+
+body {
+  background-image: url("http://ichef.bbci.co.uk/news/976/cpsprodpb/3B3F/production/_88576151_short.jpg");
 }

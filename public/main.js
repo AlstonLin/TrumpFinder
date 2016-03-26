@@ -49,7 +49,7 @@ function changeImages(){
 }
 
 function isTrump(url, callback){
-  var key = "c2335ff0aa92f9b07126dd0219e48581be27cea9";
+  var key = "a7e21d69da0d07326c5809d952a7ca0e53d42a8c";
   $.ajax({
     type: "GET",
     url: "http://gateway-a.watsonplatform.net/calls/url/URLGetRankedImageFaceTags",
