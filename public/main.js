@@ -40,7 +40,9 @@ function changeImages(){
     console.log("FUNCTION CALLED")
     console.log(this.src);
     isTrump(this.src, function(isTrump){
-      img.attr('src', "http://ichef.bbci.co.uk/news/976/cpsprodpb/3B3F/production/_88576151_short.jpg");
+      if (isTrump){
+        img.attr('src', "http://ichef.bbci.co.uk/news/976/cpsprodpb/3B3F/production/_88576151_short.jpg");
+      }
     });
   });
 }
